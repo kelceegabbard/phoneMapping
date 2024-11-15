@@ -1,0 +1,100 @@
+% Homework Template for CS 421
+\documentclass{article}
+
+\usepackage{amsmath}  % For mathematical symbols and environments
+\usepackage{listings} % For code formatting
+\usepackage{color}    % For code coloring
+\usepackage{fancyhdr} % For header and footer
+\usepackage[a4paper, left=0.8in, right=0.8in, top=1in, bottom=1in]{geometry}
+\usepackage{xcolor}   % For custom text colors
+
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+\fancyhead[L]{Cy Dixon, Kelcee Gabbard} % Left side of the header
+\fancyfoot[C]{\thepage}
+
+\author{Cy Dixon, Kelcee Gabbard}
+\title{CS 421 - Project 2 Analysis}
+\date{\today}
+
+% Code listing settings
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    stringstyle=\color{green},
+    commentstyle=\color{gray},
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=5pt,
+    breaklines=true,
+    frame=single,
+    tabsize=4,
+    showstringspaces=false,
+    captionpos=b
+}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{fancy}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Begin Section 1
+%%%%%%%%%%%%%%%%%%%%%%
+\section*{1) The Solution}
+This project implements a phone number word representation tool by mapping words from a dictionary file into hash tables. The hash tables are used to efficiently store and retrieve words based on their numeric phone number equivalents. 
+
+The solution ensures that phone numbers can be broken into their area code, exchange, and number components to find matching word representations.
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Begin Section 2
+%%%%%%%%%%%%%%%%%%%%%%
+\section*{2) List of Data Structures}
+\begin{itemize}
+    \item \textbf{HashTable:} Used to store words based on their numeric equivalents. Each hash table uses separate chaining to resolve collisions.
+    \item \textbf{ListNode:} Represents nodes in the linked lists for separate chaining in the hash table.
+    \item \textbf{Keypad Mapping:} A dictionary mapping phone keypad digits to letters (e.g., '2' maps to 'ABC').
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Begin Section 3
+%%%%%%%%%%%%%%%%%%%%%%
+\section*{3) Complexity Analysis}
+\subsection*{Loading Words into Hash Tables}
+\begin{itemize}
+    \item \textbf{Word-to-Number Conversion:} \(O(L)\), where \(L\) is the word length.
+    \item \textbf{Insertion into Hash Table:}
+        \begin{itemize}
+            \item Best Case: \(O(1)\) (no collisions).
+            \item Worst Case: \(O(n)\), where \(n\) is the number of collisions in a hash slot.
+        \end{itemize}
+    \item \textbf{Overall Complexity:} \(O(W \cdot (L + n))\), where \(W\) is the total number of words.
+\end{itemize}
+
+\subsection*{Searching Phone Numbers}
+\begin{itemize}
+    \item \textbf{10-Digit Search:} Best case \(O(1)\), worst case \(O(n)\).
+    \item \textbf{7-Digit Search:} Best case \(O(1)\), worst case \(O(n)\).
+    \item \textbf{3-Digit and 4-Digit Searches:} Best case \(O(1)\) per table, worst case \(O(n)\).
+    \item \textbf{Phone Number Parsing:} \(O(\log_{10} N)\), where \(N\) is the phone number length.
+    \item \textbf{Overall Complexity:} \(O(\log_{10} N + 4 \cdot n)\), assuming up to 4 hash tables are checked.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Begin Section 4
+%%%%%%%%%%%%%%%%%%%%%%
+\section*{4) Code}
+
+Paste your code below:
+
+\lstinputlisting[language=Python]{hash_phone.py} % Replace 'project2.py' with the file name or comment out and paste code directly below.
+
+% Alternatively, you can paste code directly below this line.
+% \begin{lstlisting}
+% # Paste your code here
+% \end{lstlisting}
+
+\end{document}

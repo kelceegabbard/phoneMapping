@@ -31,7 +31,6 @@ class HashTable:
         if self.table[index] is None:
             self.table[index] = ListNode(key, value)
         else:
-            # This part is placing the link 
             current = self.table[index]
             while current.next is not None:
                 current = current.next
@@ -46,11 +45,10 @@ class HashTable:
             if current.key == key:
                 results.append(current.value)
             current = current.next
-        return results  # Return list of matches
+        return results  # Return list of matchesa
 
     def print_table(self):
         """Print the contents of the hash table."""
-        """Just for debugging NOT included in Analysis"""
         for i in range(self.size):
             print(f"Index {i}:", end=" ")
             current = self.table[i]
@@ -72,8 +70,6 @@ hash_tables = {
     4: HashTable(table_size)    # 4-digit numbers
 }
 
-"""---------------------------------------------------------------------"""
-""" These are for putting the words in the hash table """
 def word_to_number(word):
     """Convert a word to a numeric phone number based on keypad mapping."""
     number = ""
@@ -102,10 +98,11 @@ def load_words_from_file(filename="all_words.txt"):
         #print("All words loaded successfully.")
     except FileNotFoundError:
         print(f"File '{filename}' not found.")
-"""---------------------------------------------------------------------"""
 
 def search_phone_number(phone_number):
     """Search for a word-based representation of a phone number."""
+
+    """ NEED TO REMOVE THE 1 IN THE BEGINING IF IT IS THERE """
 
     phone_number = int(phone_number)
     
