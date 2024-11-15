@@ -1,5 +1,4 @@
 import math
-import pickle
 
 # Phone keypad mapping for letters to numbers
 keypad_mapping = {
@@ -46,7 +45,21 @@ class HashTable:
             if current.key == key:
                 results.append(current.value)
             current = current.next
-        return results  # Return list of matches
+        return results  # Return list of matchesa
+
+    def print_table(self):
+        """Print the contents of the hash table."""
+        for i in range(self.size):
+            print(f"Index {i}:", end=" ")
+            current = self.table[i]
+            if current is None:
+                print("Empty")
+            else:
+                # Traverse linked list at this index and print all nodes
+                while current is not None:
+                    print(f"({current.key}, {current.value})", end=" -> ")
+                    current = current.next
+                print("None")  # End of linked list
 
 # Define separate hash tables for different number lengths
 table_size = 5003
@@ -60,11 +73,13 @@ hash_tables = {
 def word_to_number(word):
     """Convert a word to a numeric phone number based on keypad mapping."""
     number = ""
+    print(word)
     for char in word.upper():
         for key, letters in keypad_mapping.items():
             if char in letters:
                 number += key
                 break
+    print(number)
     return int(number)
 
 def insert_word(word):
@@ -82,7 +97,7 @@ def load_words_from_file(filename="all_words.txt"):
                 word = line.strip()
                 if 2 <= len(word) <= 10:  # Only words with 2 to 10 letters
                     insert_word(word)
-        print("All words loaded successfully.")
+        #print("All words loaded successfully.")
     except FileNotFoundError:
         print(f"File '{filename}' not found.")
 
@@ -90,6 +105,12 @@ def search_phone_number(phone_number):
     """Search for a word-based representation of a phone number."""
     phone_number = int(phone_number)
     
+    #seperate the numbers into parts
+    area_code, last_seven = divmod(phone_number, 10000000)
+    print('areacode: ',area_code,'last seven: ', last_seven)
+    exchange, number = divmod(last_seven, 10000)
+    print('exchange: ',exchange,'number: ',number)
+
     # Check 10-digit representation
     if phone_number >= 10**9:  # Ensure it's a 10-digit number
         results = hash_tables[10].search(phone_number)
@@ -97,31 +118,38 @@ def search_phone_number(phone_number):
             return [f"1-{word}" for word in results]
     
     # Check 7-digit representation
-    exchange, number = divmod(phone_number, 10000)
-    results = hash_tables[7].search(exchange * 10000 + number)
+    results = hash_tables[7].search(last_seven)
     if results:
-        return [f"{exchange}-{word}" for word in results]
+        return [f"1-{exchange}-{word}" for word in results]
     
     # Check 3-digit exchange and 4-digit number separately
     exchange_results = hash_tables[3].search(exchange)
     number_results = hash_tables[4].search(number)
     if exchange_results and number_results:
-        return [f"{exchange}-{ex}-{num}" for ex in exchange_results for num in number_results]
+        return [f"1-{exchange}-{ex}-{num}" for ex in exchange_results for num in number_results]
     
     # Only 3-digit exchange
     if exchange_results:
-        return [f"{exchange}-{word}-{number}" for word in exchange_results]
+        return [f"1-{exchange}-{word}-{number}" for word in exchange_results]
     
     # Only 4-digit number
     if number_results:
-        return [f"{exchange}-{number}" for word in number_results]
+        return [f"1-{area_code}-{exchange}-{word}" for word in number_results]
 
     # Default: return number in standard format
-    return [f"1-{exchange}-{number}"]
+    return [f"1-{area_code}-{last_seven}"]
 
-# Load words from all_words.txt
-load_words_from_file()
 
-# Example usage of search_phone_number
-phone_number_to_search = "6157862243"  # Replace with the phone number you want to search
-print(search_phone_number(phone_number_to_search))
+def main():
+    # Load words from all_words.txt
+    # Inserts them into the hash table
+    load_words_from_file()
+
+    # Get phone number from user
+    user_input = input("Enter Phone Number: ")
+
+    print(search_phone_number(user_input))
+    #print(hash_tables[10].print_table())
+if __name__ == "__main__":
+    main()
+
