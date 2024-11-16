@@ -45,7 +45,16 @@
 % Begin Section 1
 %%%%%%%%%%%%%%%%%%%%%%
 \section*{1) The Solution}
-This project implements a phone number word representation tool by mapping words from a dictionary file into hash tables. The hash tables are used to efficiently store and retrieve words based on their numeric phone number equivalents. 
+Our solution to this problem includes creating 4 hash tables, one for 10-letter words, one for 7-letter words, one for 4-letter words, and one for 3-letter words. These hash tables are linked-list hash tables of size 5003. We use a hash function similar to the hash function given in the Step 2 example. The hash function is:
+
+\[
+h(k) = \lfloor m \cdot ((k \cdot A) \mod 1) \rfloor
+\]
+Where k is the key to be hashed, m is the hash table size, A = 0.6180
+\\
+We have a file of all the given words from the provided word documents, and we put these words into numeric form based on the phone keypad values. Then we hash them into the table based on the numerical value of the word.
+
+Once the hash table is created, and the words are put into it, we can search for a phone number's word representation. When searching for the words, we first take the phone number and split it into the \texttt{area code}, \texttt{exchange}, and \texttt{number}. These are first searched for a 10-letter word, and if found, it is returned. If not a 10-letter word, we then search for the 7-letter words and so on.
 
 The solution ensures that phone numbers can be broken into their area code, exchange, and number components to find matching word representations.
 
@@ -63,15 +72,17 @@ The solution ensures that phone numbers can be broken into their area code, exch
 % Begin Section 3
 %%%%%%%%%%%%%%%%%%%%%%
 \section*{3) Complexity Analysis}
+\subsection*{Overall Complexity}
+The overall complexity for this searching algorithm is \(O(1)\)
+
 \subsection*{Loading Words into Hash Tables}
 \begin{itemize}
     \item \textbf{Word-to-Number Conversion:} \(O(L)\), where \(L\) is the word length.
     \item \textbf{Insertion into Hash Table:}
         \begin{itemize}
             \item Best Case: \(O(1)\) (no collisions).
-            \item Worst Case: \(O(n)\), where \(n\) is the number of collisions in a hash slot.
+            \item Worst Case: \(O(n)\)
         \end{itemize}
-    \item \textbf{Overall Complexity:} \(O(W \cdot (L + n))\), where \(W\) is the total number of words.
 \end{itemize}
 
 \subsection*{Searching Phone Numbers}
@@ -79,8 +90,7 @@ The solution ensures that phone numbers can be broken into their area code, exch
     \item \textbf{10-Digit Search:} Best case \(O(1)\), worst case \(O(n)\).
     \item \textbf{7-Digit Search:} Best case \(O(1)\), worst case \(O(n)\).
     \item \textbf{3-Digit and 4-Digit Searches:} Best case \(O(1)\) per table, worst case \(O(n)\).
-    \item \textbf{Phone Number Parsing:} \(O(\log_{10} N)\), where \(N\) is the phone number length.
-    \item \textbf{Overall Complexity:} \(O(\log_{10} N + 4 \cdot n)\), assuming up to 4 hash tables are checked.
+    \item \textbf{Phone Number Parsing:} \(O(\log N)\), where \(N\) is the phone number length.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%
